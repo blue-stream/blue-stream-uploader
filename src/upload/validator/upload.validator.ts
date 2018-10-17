@@ -1,38 +1,38 @@
 import { Request, Response, NextFunction } from 'express';
-import { FeatureNameValidatons } from './FEATURE_NAME.validations';
+import { UploadValidatons } from './upload.validations';
 import { PropertyInvalidError, IdInvalidError } from '../../utils/errors/userErrors';
-import { IFeatureName } from '../FEATURE_NAME.interface';
+import { IUpload } from '../upload.interface';
 
-export class FeatureNameValidator {
+export class UploadValidator {
 
     static canCreate(req: Request, res: Response, next: NextFunction) {
-        next(FeatureNameValidator.validateProperty(req.body.featureName.property));
+        next(UploadValidator.validateProperty(req.body.upload.property));
     }
 
     static canCreateMany(req: Request, res: Response, next: NextFunction) {
-        const propertiesValidations: (Error | undefined)[] = req.body.featureNames.map((featureName: IFeatureName) => {
-            return FeatureNameValidator.validateProperty(featureName.property);
+        const propertiesValidations: (Error | undefined)[] = req.body.uploads.map((upload: IUpload) => {
+            return UploadValidator.validateProperty(upload.property);
         });
 
-        next(FeatureNameValidator.getNextValueFromArray(propertiesValidations));
+        next(UploadValidator.getNextValueFromArray(propertiesValidations));
     }
 
     static canUpdateById(req: Request, res: Response, next: NextFunction) {
         next(
-            FeatureNameValidator.validateId(req.params.id) ||
-            FeatureNameValidator.validateProperty(req.body.featureName.property));
+            UploadValidator.validateId(req.params.id) ||
+            UploadValidator.validateProperty(req.body.upload.property));
     }
 
     static canUpdateMany(req: Request, res: Response, next: NextFunction) {
-        next(FeatureNameValidator.validateProperty(req.body.featureName.property));
+        next(UploadValidator.validateProperty(req.body.upload.property));
     }
 
     static canDeleteById(req: Request, res: Response, next: NextFunction) {
-        next(FeatureNameValidator.validateId(req.params.id));
+        next(UploadValidator.validateId(req.params.id));
     }
 
     static canGetById(req: Request, res: Response, next: NextFunction) {
-        next(FeatureNameValidator.validateId(req.params.id));
+        next(UploadValidator.validateId(req.params.id));
     }
 
     static canGetOne(req: Request, res: Response, next: NextFunction) {
@@ -48,7 +48,7 @@ export class FeatureNameValidator {
     }
 
     private static validateProperty(property: string) {
-        if (!FeatureNameValidatons.isPropertyValid(property)) {
+        if (!UploadValidatons.isPropertyValid(property)) {
             return new PropertyInvalidError();
         }
 
@@ -56,7 +56,7 @@ export class FeatureNameValidator {
     }
 
     private static validateId(id: string) {
-        if (!FeatureNameValidatons.isIdValid(id)) {
+        if (!UploadValidatons.isIdValid(id)) {
             return new IdInvalidError();
         }
 

@@ -10,63 +10,63 @@ export class ValidRequestMocks {
     readonly validProperty2: string = '23456';
     readonly validProperty3: string = '34567';
 
-    readonly featureName = {
+    readonly upload = {
         property: this.validProperty,
     };
 
-    readonly featureName2 = {
+    readonly upload2 = {
         property: this.validProperty2,
     };
 
-    readonly featureName3 = {
+    readonly upload3 = {
         property: this.validProperty3,
     };
 
-    readonly featureNameFilter = this.featureName;
+    readonly uploadFilter = this.upload;
 
     authorizationHeader = `Bearer ${sign('mock-user', config.authentication.secret)}`;
 
     create = createRequest({
         method: 'POST',
-        url: '/api/featureName/',
+        url: '/api/upload/',
         headers: {
             authorization: this.authorizationHeader,
         },
         body: {
-            featureName: this.featureName,
+            upload: this.upload,
         },
     });
 
     createMany = createRequest({
         method: 'POST',
-        url: '/api/featureName/many/',
+        url: '/api/upload/many/',
         headers: {
             authorization: this.authorizationHeader,
         },
         body: {
-            featureNames: [
-                this.featureName,
-                this.featureName2,
-                this.featureName3,
+            uploads: [
+                this.upload,
+                this.upload2,
+                this.upload3,
             ],
         },
     });
 
     updateMany = createRequest({
         method: 'PUT',
-        url: '/api/featureName/many',
+        url: '/api/upload/many',
         headers: {
             authorization: this.authorizationHeader,
         },
         body: {
-            featureNameFilter: this.featureNameFilter,
-            featureName: this.featureName,
+            uploadFilter: this.uploadFilter,
+            upload: this.upload,
         },
     });
 
     updateById = createRequest({
         method: 'PUT',
-        url: '/api/featureName/:id',
+        url: '/api/upload/:id',
         headers: {
             authorization: this.authorizationHeader,
         },
@@ -74,13 +74,13 @@ export class ValidRequestMocks {
             id: new Types.ObjectId(),
         },
         body: {
-            featureName: this.featureName,
+            upload: this.upload,
         },
     });
 
     deleteById = createRequest({
         method: 'DELETE',
-        url: '/api/featureName/:id',
+        url: '/api/upload/:id',
         headers: {
             authorization: this.authorizationHeader,
         },
@@ -91,34 +91,34 @@ export class ValidRequestMocks {
 
     getOne = createRequest({
         method: 'GET',
-        url: `/api/featureName/one?featureNameFilter={'property':${this.validProperty}}`,
+        url: `/api/upload/one?uploadFilter={'property':${this.validProperty}}`,
         headers: {
             authorization: this.authorizationHeader,
         },
-        query: this.featureName,
+        query: this.upload,
     });
 
     getMany = createRequest({
         method: 'GET',
-        url: `/api/featureName/many?featureNameFilter={'property':${this.validProperty}}`,
+        url: `/api/upload/many?uploadFilter={'property':${this.validProperty}}`,
         headers: {
             authorization: this.authorizationHeader,
         },
-        query: this.featureName,
+        query: this.upload,
     });
 
     getAmount = createRequest({
         method: 'GET',
-        url: `/api/featureName/amount?featureNameFilter={'property':${this.validProperty}}`,
+        url: `/api/upload/amount?uploadFilter={'property':${this.validProperty}}`,
         headers: {
             authorization: this.authorizationHeader,
         },
-        query: this.featureName,
+        query: this.upload,
     });
 
     getById = createRequest({
         method: 'GET',
-        url: '/api/featureName/:id',
+        url: '/api/upload/:id',
         headers: {
             authorization: this.authorizationHeader,
         },

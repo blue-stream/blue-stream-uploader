@@ -1,8 +1,8 @@
 import { Router } from 'express';
-import { FeatureNameRouter } from './FEATURE_NAME/FEATURE_NAME.router';
+import { UploadRouter } from './upload/upload.router';
 
 const AppRouter: Router = Router();
 
-AppRouter.use('/api/featureName', FeatureNameRouter);
+AppRouter.use('/api/upload', UploadRouter);
 
 export { AppRouter };

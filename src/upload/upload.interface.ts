@@ -1,4 +1,4 @@
-export interface IFeatureName {
+export interface IUpload {
     id?: string;
     property: string;
 }
