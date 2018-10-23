@@ -1,9 +1,11 @@
+require('dotenv').config();
+
+export enum StorageType {
+    Disk,
+    S3,
+}
+
 export type Configuration = {
-    db: {
-        host: string;
-        name: string;
-        port: number;
-    };
     logger: {
         durable: boolean;
         exchangeType: string;
@@ -17,7 +19,6 @@ export type Configuration = {
     rabbitMQ: {
         host: string;
         exchanges: {
-            uploadReceiver: string;
             uploadPublisher: string;
         };
         reconnect_timeout: number;
@@ -30,14 +31,26 @@ export type Configuration = {
         required: boolean;
         secret: string;
     };
+    upload: {
+        storage: StorageType;
+        formats: string[];
+        maxSize: number;
+        maxFilesAmount: number;
+        fileKey: string;
+        disk: {
+            path: string;
+        };
+        s3: {
+            region: string;
+            bucket: string;
+            accessKeyId: string;
+            secretAccessKey: string;
+            url: string;
+        }
+    }
 };
 
 const development: Configuration = {
-    db: {
-        host: process.env.DB_SERVER || 'localhost',
-        name: process.env.DB_NAME || 'blue-stream-template',
-        port: 27017,
-    },
     logger: {
         durable: false,
         exchangeType: 'topic' || process.env.RMQ_LOGGER_TYPE,
@@ -51,7 +64,6 @@ const development: Configuration = {
     rabbitMQ: {
         host: 'localhost',
         exchanges: {
-            uploadReceiver: 'upload',
             uploadPublisher: 'upload',
         },
         reconnect_timeout: 1000,
@@ -61,17 +73,29 @@ const development: Configuration = {
         name: 'upload',
     },
     authentication: {
-        required: true,
+        required: false,
         secret: process.env.SECRET_KEY || 'bLue5tream@2018', // Don't use static value in production! remove from source control!
+    },
+    upload: {
+        formats: ['.mp4', '.flv', '.avi', '.mkv', 'mpg', 'mpeg'],
+        storage: StorageType.Disk,
+        maxSize: 209715200,
+        maxFilesAmount: 1,
+        fileKey: 'videoFile',
+        disk: {
+            path: 'C:/BlueStream/Uploads/',
+        },
+        s3: {
+            region: process.env.REGION || '',
+            bucket: process.env.BUCKET || '',
+            accessKeyId: process.env.ACCESS_KEY_ID || '',
+            secretAccessKey: process.env.SECRET_ACCESS_KEY || '',
+            url: process.env.S3_URL || '',
+        },
     },
 };
 
 const production: Configuration = {
-    db: {
-        host: process.env.DB_SERVER || 'localhost',
-        name: process.env.DB_NAME || 'blue-stream-template',
-        port: 27017,
-    },
     logger: {
         durable: false,
         exchangeType: 'topic' || process.env.RMQ_LOGGER_TYPE,
@@ -85,7 +109,6 @@ const production: Configuration = {
     rabbitMQ: {
         host: 'localhost',
         exchanges: {
-            uploadReceiver: 'upload',
             uploadPublisher: 'upload',
         },
         reconnect_timeout: 1000,
@@ -97,15 +120,27 @@ const production: Configuration = {
     authentication: {
         required: true,
         secret: process.env.SECRET_KEY || 'bLue5tream@2018', // Don't use static value in production! remove from source control!
+    },
+    upload: {
+        formats: ['.mp4', '.flv', '.avi', '.mkv', 'mpg', 'mpeg'],
+        storage: StorageType.S3,
+        maxSize: 209715200,
+        maxFilesAmount: 1,
+        fileKey: 'videoFile',
+        disk: {
+            path: 'C:/BlueStream/Uploads/',
+        },
+        s3: {
+            region: process.env.REGION || '',
+            bucket: process.env.BUCKET || '',
+            accessKeyId: process.env.ACCESS_KEY_ID || '',
+            secretAccessKey: process.env.SECRET_ACCESS_KEY || '',
+            url: process.env.S3_URL || '',
+        },
     },
 };
 
 const test: Configuration = {
-    db: {
-        host: process.env.DB_SERVER || 'localhost',
-        name: process.env.DB_NAME || 'blue-stream-template-test',
-        port: 27017,
-    },
     logger: {
         durable: false,
         exchangeType: 'topic' || process.env.RMQ_LOGGER_TYPE,
@@ -119,7 +154,6 @@ const test: Configuration = {
     rabbitMQ: {
         host: 'localhost',
         exchanges: {
-            uploadReceiver: 'upload',
             uploadPublisher: 'upload',
         },
         reconnect_timeout: 1000,
@@ -131,6 +165,23 @@ const test: Configuration = {
     authentication: {
         required: true,
         secret: process.env.SECRET_KEY || 'bLue5tream@2018', // Don't use static value in production! remove from source control!
+    },
+    upload: {
+        formats: ['.mp4', '.flv', '.avi', '.mkv', 'mpg', 'mpeg'],
+        storage: StorageType.S3,
+        maxSize: 209715200,
+        maxFilesAmount: 1,
+        fileKey: 'videoFile',
+        disk: {
+            path: 'C:/BlueStream/Uploads/',
+        },
+        s3: {
+            region: process.env.REGION || '',
+            bucket: process.env.BUCKET || '',
+            accessKeyId: process.env.ACCESS_KEY_ID || '',
+            secretAccessKey: process.env.SECRET_ACCESS_KEY || '',
+            url: process.env.S3_URL || '',
+        },
     },
 };
 

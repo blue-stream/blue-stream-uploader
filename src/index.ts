@@ -5,8 +5,6 @@ import { Logger } from './utils/logger';
 import { config } from './config';
 import { syslogSeverityLevels } from 'llamajs';
 
-
-import { UploadService } from './upload/upload.broker';
 process.on('uncaughtException', (err) => {
     console.error('Unhandled Exception', err.stack);
     RabbitMQ.closeConnection();
@@ -35,8 +33,6 @@ process.on('SIGINT', async () => {
     Logger.configure();
     Logger.log(syslogSeverityLevels.Informational, 'Server Started', `Port: ${config.server.port}`);
 
-    
-    await UploadService.startReceiver();
     console.log('Starting server');
     const server: Server = Server.bootstrap();
 

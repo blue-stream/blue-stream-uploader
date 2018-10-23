@@ -80,3 +80,5 @@ typings/
 
 # vs code config
 /.vscode
+
+.env
