@@ -37,7 +37,7 @@ export class RabbitMQ {
         } else {
             const channel = await RabbitMQ.amqpConnection.createChannel();
 
-            channel.assertExchange(this.amqpExchange, 'fanout', { durable: true });
+            channel.assertExchange(this.amqpExchange, 'topic', { durable: true }); /// change to config
 
             channel.on('error', (error) => {
                 console.error('[RabbitMQ Logger] channel error', error.message);
