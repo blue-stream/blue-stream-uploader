@@ -70,7 +70,7 @@ const development: Configuration = {
     },
     server: {
         port: 3000,
-        name: 'upload',
+        name: 'uploader',
     },
     authentication: {
         required: false,
@@ -115,7 +115,7 @@ const production: Configuration = {
     },
     server: {
         port: process.env.PORT ? +process.env.PORT : 3000,
-        name: 'upload',
+        name: 'uploader',
     },
     authentication: {
         required: true,
@@ -160,7 +160,7 @@ const test: Configuration = {
     },
     server: {
         port: process.env.PORT ? +process.env.PORT : 3000,
-        name: 'upload',
+        name: 'uploader',
     },
     authentication: {
         required: true,
