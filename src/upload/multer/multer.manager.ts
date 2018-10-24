@@ -48,7 +48,7 @@ export class MulterManager {
 
     private setLimits() {
         this.limits = {
-            fields: 0,
+            fields: 1,
             files: config.upload.maxFilesAmount,
             fileSize: config.upload.maxSize,
         };
