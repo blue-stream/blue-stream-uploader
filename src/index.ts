@@ -1,6 +1,7 @@
 import * as mongoose from 'mongoose';
 import { Server } from './server';
 import { RabbitMQ } from './utils/rabbitMQ';
+import { UploadBroker } from './upload/upload.broker';
 import { Logger } from './utils/logger';
 import { config } from './config';
 import { syslogSeverityLevels } from 'llamajs';
@@ -29,7 +30,9 @@ process.on('SIGINT', async () => {
 });
 
 (async () => {
-    const connection = await RabbitMQ.connect();
+    await RabbitMQ.connect();
+    await UploadBroker.startPublisher();
+
     Logger.configure();
     Logger.log(syslogSeverityLevels.Informational, 'Server Started', `Port: ${config.server.port}`);
 
