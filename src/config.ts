@@ -79,7 +79,7 @@ const development: Configuration = {
     upload: {
         formats: ['.mp4', '.flv', '.avi', '.mkv', 'mpg', 'mpeg'],
         storage: StorageType.Disk,
-        maxSize: 209715200,
+        maxSize: 20971520000,
         maxFilesAmount: 1,
         fileKey: 'videoFile',
         disk: {
