@@ -1,8 +1,8 @@
 require('dotenv').config();
 
 export enum StorageType {
-    Disk,
-    S3,
+    Disk = 'Disk',
+    S3 = 'S3',
 }
 
 export type Configuration = {
