@@ -2,7 +2,7 @@ import * as path from 'path';
 import * as multer from 'multer';
 import { pseudoRandomBytes } from 'crypto';
 import { Request } from 'express';
-import { config } from "../../../config";
+import { config } from '../../../config';
 
 export class DiskStorage {
     destination: string;
