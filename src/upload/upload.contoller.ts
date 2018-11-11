@@ -2,6 +2,8 @@ import { Request, Response } from 'express';
 import { UploadBroker } from './upload.broker';
 import { config } from '../config';
 import { RequestValidationError } from '../utils/errors/applicationErrors';
+import { Logger } from '../utils/logger';
+import { syslogSeverityLevels } from 'llamajs';
 
 export class UploadController {
     static async upload(req: Request, res: Response) {
@@ -15,6 +17,10 @@ export class UploadController {
         }
 
         UploadController.publishUploadMessage(req.body.videoId, key);
+        Logger.log(
+            syslogSeverityLevels.Informational,
+            'File uploaded',
+            `file with key ${key} was uploaded to ${config.upload.storage}`);
 
         return res.json(key);
     }
