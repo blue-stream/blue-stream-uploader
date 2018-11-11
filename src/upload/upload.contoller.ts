@@ -22,7 +22,7 @@ export class UploadController {
     public static publishUploadMessage(videoId: string, videoKey: string) {
         const serverName: string = config.server.name;
         const action: string = 'upload';
-        const status: string = 'started';
+        const status: string = 'successful';
 
         const routingKey = `${serverName}.${action}.${status}`;
 
