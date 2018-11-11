@@ -67,11 +67,12 @@ describe('Upload', () => {
             .post('/api/upload')
             .set('Content-type', 'multipart/form-data')
             .attach(config.upload.fileKey, fs.createReadStream(path.join(__dirname, '../testing-files', 'test.txt')))
-            .expect(400)
+            .expect(415)
             .end((err: Error, response: request.Response) => {
                 expect(err).to.not.exist;
                 expect(response).to.exist;
-                expect(response.body).to.be.empty;
+                expect(response.body).to.have.property('type', 'UnsupportedMediaTypeError');
+                expect(response.body).to.have.property('message');
 
                 done();
             });
