@@ -18,8 +18,6 @@ describe('Upload', () => {
     });
 
     after(async () => {
-        // server.server.close();
-
         await removeTestingFiles(files);
     });
 
