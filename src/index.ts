@@ -1,4 +1,3 @@
-import * as mongoose from 'mongoose';
 import { Server } from './server';
 import { RabbitMQ } from './utils/rabbitMQ';
 import { UploadBroker } from './upload/upload.broker';
@@ -21,7 +20,6 @@ process.on('unhandledRejection', (err) => {
 process.on('SIGINT', async () => {
     try {
         console.log('User Termination');
-        await mongoose.disconnect();
         RabbitMQ.closeConnection();
         process.exit(0);
     } catch (error) {
