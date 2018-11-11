@@ -114,7 +114,7 @@ const production: Configuration = {
         reconnect_timeout: 1000,
     },
     server: {
-        port: process.env.PORT ? +process.env.PORT : 3000,
+        port: process.env.PORT ? +process.env.PORT : 3003,
         name: 'uploader',
     },
     authentication: {
@@ -163,7 +163,7 @@ const test: Configuration = {
         name: 'uploader',
     },
     authentication: {
-        required: true,
+        required: false,
         secret: process.env.SECRET_KEY || 'bLue5tream@2018', // Don't use static value in production! remove from source control!
     },
     upload: {
