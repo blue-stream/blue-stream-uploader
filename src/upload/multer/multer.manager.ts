@@ -4,6 +4,7 @@ import { DiskStorage } from './storage/disk.storage';
 import { S3Storage } from './storage/s3.storage';
 import { config, StorageType } from '../../config';
 import * as path from 'path';
+import { UnsupportedMediaTypeError } from '../../utils/errors/applicationErrors';
 
 export class MulterManager {
     private storage!: multer.StorageEngine;
@@ -42,7 +43,7 @@ export class MulterManager {
         if (config.upload.formats.indexOf(path.extname(file.originalname)) > -1) {
             cb(null, true);
         } else {
-            cb(null, false);
+            cb(new UnsupportedMediaTypeError(path.extname(file.originalname)), false);
         }
     }
 
