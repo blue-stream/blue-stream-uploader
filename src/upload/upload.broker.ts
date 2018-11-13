@@ -19,7 +19,7 @@ export class UploadBroker {
             id: videoId,
         });
 
-        UploadBroker.publishMessage(message, 'upload', 'successful');
+        UploadBroker.publishMessage(message, 'upload', 'succeeded');
     }
 
     public static publishUploadCanceled(videoId: string) {
