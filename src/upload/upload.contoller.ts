@@ -14,7 +14,7 @@ export class UploadController {
 
         req.on('close', async () => {
             await multerManager.removeFile((req as any)['fileKey']);
-            UploadBroker.publishUploadCanceled((req as any)['fileKey']);
+            UploadBroker.publishUploadCanceled(req.body.videoId);
             return res.status(202).send('Upload was terminated by user');
         });
 
