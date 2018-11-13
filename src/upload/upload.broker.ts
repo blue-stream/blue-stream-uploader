@@ -30,6 +30,14 @@ export class UploadBroker {
         UploadBroker.publishMessage(message, 'upload', 'canceled');
     }
 
+    public static publishUploadFailed(videoId: string) {
+        const message: string = JSON.stringify({
+            id: videoId,
+        });
+
+        UploadBroker.publishMessage(message, 'upload', 'failed');
+    }
+
     public static publishMessage(message: string, action: string, status: string) {
         const serverName: string = config.server.name;
         const routingKey = `${serverName}.${action}.${status}`;
