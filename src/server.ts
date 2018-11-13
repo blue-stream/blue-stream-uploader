@@ -33,11 +33,21 @@ export class Server {
         this.app.use(helmet());
 
         this.app.use(function (req, res, next) {
-            res.header('Access-Control-Allow-Origin', '*');
-            res.header('Access-Control-Allow-Methods', 'PUT, GET, POST, DELETE, OPTIONS');
-            res.header('Access-Control-Allow-Headers', 'Authorization, Origin, X-Requested-With, Content-Type, Accept');
+            const origin = req.headers.origin as string;
 
-            next();
+            if (config.cors.allowedOrigins.indexOf(origin) !== -1) {
+                res.setHeader('Access-Control-Allow-Origin', origin);
+            }
+
+            res.setHeader('Access-Control-Allow-Credentials', 'true');
+            res.setHeader('Access-Control-Allow-Methods', 'POST, OPTIONS');
+            res.setHeader('Access-Control-Allow-Headers', 'Authorization, Origin, X-Requested-With, Content-Type');
+
+            if (req.method === 'OPTIONS') {
+                return res.status(200).end();
+            }
+
+            return next();
         });
 
         if (process.env.NODE_ENV === 'development') {
