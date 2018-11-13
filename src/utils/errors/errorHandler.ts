@@ -2,9 +2,13 @@ import * as express from 'express';
 import { ServerError, UserError } from './applicationError';
 import { Logger } from '../logger';
 import { syslogSeverityLevels } from 'llamajs/dist';
+import { UploadBroker } from '../../upload/upload.broker';
 
 export function userErrorHandler(error: Error, req: express.Request, res: express.Response, next: express.NextFunction) {
     if (error instanceof UserError) {
+
+        UploadBroker.publishUploadFailed(req.body.videoId);
+
         Logger.log(
             syslogSeverityLevels.Notice,
             'User Error',

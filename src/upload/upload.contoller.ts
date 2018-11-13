@@ -24,7 +24,6 @@ export class UploadController {
     static upload(req: Request, res: Response) {
 
         if (!req.file) {
-            UploadBroker.publishUploadFailed(req.body.videoId);
             throw new RequestValidationError();
         }
 
