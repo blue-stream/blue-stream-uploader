@@ -15,7 +15,7 @@ export class UploadBroker {
 
     public static publishUploadSuccessful(videoId: string, videoKey: string) {
         const message: string = JSON.stringify({
-            videoKey,
+            key: videoKey,
             id: videoId,
         });
 
