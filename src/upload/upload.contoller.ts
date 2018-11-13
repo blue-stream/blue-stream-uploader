@@ -14,6 +14,7 @@ export class UploadController {
 
         req.on('close', async () => {
             await multerManager.removeFile((req as any)['fileKey']);
+            UploadBroker.publishUploadCanceled((req as any)['fileKey']);
             return res.status(202).send('Upload was terminated by user');
         });
 
@@ -31,27 +32,12 @@ export class UploadController {
             key = req.file.filename;
         }
 
-        UploadController.publishUploadMessage(req.body.videoId, key);
+        UploadBroker.publishUploadSuccessful(req.body.videoId, key);
         Logger.log(
             syslogSeverityLevels.Informational,
             'File uploaded',
             `file with key ${key} was uploaded to ${config.upload.storage}`);
 
         return res.json(key);
-    }
-
-    public static publishUploadMessage(videoId: string, videoKey: string) {
-        const serverName: string = config.server.name;
-        const action: string = 'upload';
-        const status: string = 'successful';
-
-        const routingKey = `${serverName}.${action}.${status}`;
-
-        const message: string = JSON.stringify({
-            videoId,
-            videoKey,
-        });
-
-        UploadBroker.publish(routingKey, message);
     }
 }
