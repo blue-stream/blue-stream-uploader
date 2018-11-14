@@ -40,7 +40,8 @@ export class UploadBroker {
 
     public static publishMessage(message: string, action: string, status: string) {
         const serverName: string = config.server.name;
-        const routingKey = `${serverName}.${action}.${status}`;
+        const entity: string = 'video';
+        const routingKey = `${serverName}.${entity}.${action}.${status}`;
 
         UploadBroker.publish(routingKey, message);
     }
