@@ -32,11 +32,9 @@ export class MulterManager {
 
     private initStorage(storage: StorageType) {
         if (storage === StorageType.Disk) {
-            const diskStorage: DiskStorage = new DiskStorage();
-            this.storage = diskStorage;
+            this.storage = new DiskStorage();
         } else {
-            const s3Storage: S3Storage = new S3Storage();
-            this.storage = s3Storage;
+            this.storage = new S3Storage();
         }
     }
 
