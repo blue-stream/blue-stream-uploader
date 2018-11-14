@@ -4,17 +4,22 @@ import * as multerS3 from 'multer-s3';
 import { pseudoRandomBytes } from 'crypto';
 import { Request } from 'express';
 import { config } from '../../../config';
+import { Storage } from './storage';
 
-export class S3Storage {
+export class S3Storage extends Storage {
     s3: aws.S3;
     bucket: string;
 
     constructor() {
+        super();
+
         this.s3 = new aws.S3({
+            s3ForcePathStyle: true,
             accessKeyId: config.upload.s3.accessKeyId,
             region: config.upload.s3.region,
             secretAccessKey: config.upload.s3.secretAccessKey,
-            signatureVersion: 'v3',
+            signatureVersion: config.upload.s3.signatureVersion,
+            endpoint: config.upload.s3.endpoint,
         });
 
         this.bucket = config.upload.s3.bucket;
@@ -37,10 +42,21 @@ export class S3Storage {
             const randomBytes: string = raw.toString('hex');
             const fileExtension: string = path.extname(file.originalname);
             const fileKey: string = `${date}_${randomBytes}${fileExtension}`;
+            (req as any)['fileKey'] = fileKey;
+
             callback(null, fileKey);
 
             return null;
         });
+    }
+
+    public removeFile(fileKey: string) {
+        const params: aws.S3.DeleteObjectRequest = {
+            Bucket: this.bucket,
+            Key: fileKey,
+        };
+
+        return this.s3.deleteObject(params).promise();
     }
 
     public getStorage() {

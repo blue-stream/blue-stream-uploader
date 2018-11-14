@@ -1,8 +1,8 @@
 require('dotenv').config();
 
 export enum StorageType {
-    Disk,
-    S3,
+    Disk = 'Disk',
+    S3 = 'S3',
 }
 
 export type Configuration = {
@@ -31,6 +31,9 @@ export type Configuration = {
         required: boolean;
         secret: string;
     };
+    cors: {
+        allowedOrigins: string[];
+    }
     upload: {
         storage: StorageType;
         formats: string[];
@@ -45,6 +48,8 @@ export type Configuration = {
             bucket: string;
             accessKeyId: string;
             secretAccessKey: string;
+            signatureVersion: string;
+            endpoint: string;
             url: string;
         }
     }
@@ -69,17 +74,20 @@ const development: Configuration = {
         reconnect_timeout: 1000,
     },
     server: {
-        port: 3000,
-        name: 'upload',
+        port: 3003,
+        name: 'uploader',
     },
     authentication: {
-        required: false,
+        required: true,
         secret: process.env.SECRET_KEY || 'bLue5tream@2018', // Don't use static value in production! remove from source control!
+    },
+    cors: {
+        allowedOrigins: process.env.ALLOWED_ORIGINS ? process.env.ALLOWED_ORIGINS.split(',') : ['http://localhost:4200'],
     },
     upload: {
         formats: ['.mp4', '.flv', '.avi', '.mkv', 'mpg', 'mpeg'],
-        storage: StorageType.Disk,
-        maxSize: 209715200,
+        storage: StorageType.S3,
+        maxSize: 20971520000,
         maxFilesAmount: 1,
         fileKey: 'videoFile',
         disk: {
@@ -91,6 +99,8 @@ const development: Configuration = {
             accessKeyId: process.env.ACCESS_KEY_ID || '',
             secretAccessKey: process.env.SECRET_ACCESS_KEY || '',
             url: process.env.S3_URL || '',
+            signatureVersion: 'v4',
+            endpoint: 'http://172.19.165.113:9000',
         },
     },
 };
@@ -114,12 +124,15 @@ const production: Configuration = {
         reconnect_timeout: 1000,
     },
     server: {
-        port: process.env.PORT ? +process.env.PORT : 3000,
-        name: 'upload',
+        port: process.env.PORT ? +process.env.PORT : 3003,
+        name: 'uploader',
     },
     authentication: {
         required: true,
         secret: process.env.SECRET_KEY || 'bLue5tream@2018', // Don't use static value in production! remove from source control!
+    },
+    cors: {
+        allowedOrigins: process.env.ALLOWED_ORIGINS ? process.env.ALLOWED_ORIGINS.split(',') : ['http://localhost:4200'],
     },
     upload: {
         formats: ['.mp4', '.flv', '.avi', '.mkv', 'mpg', 'mpeg'],
@@ -136,6 +149,8 @@ const production: Configuration = {
             accessKeyId: process.env.ACCESS_KEY_ID || '',
             secretAccessKey: process.env.SECRET_ACCESS_KEY || '',
             url: process.env.S3_URL || '',
+            signatureVersion: 'v4',
+            endpoint: 'http://172.19.165.113:9000',
         },
     },
 };
@@ -160,11 +175,14 @@ const test: Configuration = {
     },
     server: {
         port: process.env.PORT ? +process.env.PORT : 3000,
-        name: 'upload',
+        name: 'uploader',
     },
     authentication: {
-        required: true,
+        required: false,
         secret: process.env.SECRET_KEY || 'bLue5tream@2018', // Don't use static value in production! remove from source control!
+    },
+    cors: {
+        allowedOrigins: process.env.ALLOWED_ORIGINS ? process.env.ALLOWED_ORIGINS.split(',') : ['http://localhost:4200'],
     },
     upload: {
         formats: ['.mp4', '.flv', '.avi', '.mkv', 'mpg', 'mpeg'],
@@ -181,6 +199,8 @@ const test: Configuration = {
             accessKeyId: process.env.ACCESS_KEY_ID || '',
             secretAccessKey: process.env.SECRET_ACCESS_KEY || '',
             url: process.env.S3_URL || '',
+            signatureVersion: 'v4',
+            endpoint: 'http://172.19.165.113:9000',
         },
     },
 };
