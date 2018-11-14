@@ -7,7 +7,7 @@
     "start": "tsc && cross-env NODE_ENV=production&& node ./dist/index.js",
     "dev": "tsc && cross-env NODE_ENV=development&& node ./dist/index.js",
     "test": "mocha --recursive -r ts-node/register src/**/*.spec.ts --exit",
-    "pretest": "cross-env NODE_ENV=test",
+    "pretest": "cross-env NODE_ENV=test &&cross-env AUTHENTICATION_REQUIRED=0",
     "test:validation": "cross-env NODE_ENV=test&& mocha --recursive -r ts-node/register \"src/**/*.validator.spec.ts\" --exit",
     "test:integration": "cross-env NODE_ENV=test&& mocha --recursive -r ts-node/register \"src/**/*.router.spec.ts\" --exit",
     "test:repository": "cross-env NODE_ENV=test&& mocha --recursive -r ts-node/register \"src/**/*.repository.spec.ts\" --exit",

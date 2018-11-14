@@ -9,7 +9,7 @@ import * as multer from 'multer';
 
 export class UploadController {
     static uploadSingle(req: Request, res: Response, next: NextFunction) {
-        const multerManager: MulterManager = (new MulterManager(config.upload.storage));
+        const multerManager: MulterManager = (new MulterManager(config.upload.storage as 'Disk' | 'S3'));
         const upload: multer.Instance = multerManager.getInstance();
 
         req.on('close', async () => {

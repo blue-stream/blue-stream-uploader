@@ -1,6 +1,5 @@
 process.env.NODE_ENV = 'test';
 
-import * as rimraf from 'rimraf';
 import * as request from 'supertest';
 import * as fs from 'fs';
 import * as path from 'path';

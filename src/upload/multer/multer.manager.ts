@@ -2,7 +2,7 @@ import * as multer from 'multer';
 import { Request } from 'express';
 import { DiskStorage } from './storage/disk.storage';
 import { S3Storage } from './storage/s3.storage';
-import { config, StorageType } from '../../config';
+import { config } from '../../config';
 import * as path from 'path';
 import { UnsupportedMediaTypeError } from '../../utils/errors/applicationErrors';
 import { Storage } from './storage/storage';
@@ -12,7 +12,7 @@ export class MulterManager {
     private limits: multer.Options['limits'];
     private multerInstance!: multer.Instance;
 
-    constructor(storage: StorageType) {
+    constructor(storage: 'Disk' | 'S3') {
         this.initStorage(storage);
         this.setLimits();
         this.initMulterInstance();
@@ -30,8 +30,8 @@ export class MulterManager {
         });
     }
 
-    private initStorage(storage: StorageType) {
-        if (storage === StorageType.Disk) {
+    private initStorage(storage: 'Disk' | 'S3') {
+        if (storage === 'Disk') {
             this.storage = new DiskStorage();
         } else {
             this.storage = new S3Storage();
@@ -53,8 +53,8 @@ export class MulterManager {
     private setLimits() {
         this.limits = {
             fields: 1,
-            files: config.upload.maxFilesAmount,
-            fileSize: config.upload.maxSize,
+            files: +config.upload.maxFilesAmount,
+            fileSize: +config.upload.maxSize,
         };
     }
 }
