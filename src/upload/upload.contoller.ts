@@ -18,6 +18,10 @@ export class UploadController {
             return res.status(202).send('Upload was terminated by user');
         });
 
+        req.on('error', async (error) => {
+            throw error;
+        });
+
         return upload.single(config.upload.fileKey)(req, res, next);
     }
 
