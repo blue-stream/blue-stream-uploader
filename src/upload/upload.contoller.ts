@@ -12,14 +12,9 @@ export class UploadController {
         const multerManager: MulterManager = (new MulterManager(config.upload.storage as 'Disk' | 'S3'));
         const upload: multer.Instance = multerManager.getInstance();
 
-        req.on('close', async () => {
+        req.on('aborted', async () => {
             await multerManager.removeFile((req as any)['fileKey']);
             UploadBroker.publishUploadCanceled(req.body.videoId);
-            return res.status(202).send('Upload was terminated by user');
-        });
-
-        req.on('error', async (error) => {
-            throw error;
         });
 
         return upload.single(config.upload.fileKey)(req, res, next);
