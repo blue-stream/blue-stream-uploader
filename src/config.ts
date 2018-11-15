@@ -17,7 +17,7 @@ export const config = {
         password: process.env.RMQ_PASSWORD || 'guest',
         username: process.env.RMQ_USERNAME || 'guest',
         exchanges: {
-            uploadPublisher: 'upload',
+            uploadPublisher: process.env.RMQ_EXCHANGE || 'upload',
         },
         reconnect_timeout: 1000,
     },
