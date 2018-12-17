@@ -1,5 +1,10 @@
 require('dotenv').config();
 
+enum StorageType {
+    S3 = 'S3',
+    Disk = 'Disk',
+}
+
 export const config = {
     logger: {
         durable: process.env.RMQ_LOGGER_DURABLE || false,
@@ -22,7 +27,7 @@ export const config = {
         reconnect_timeout: 1000,
     },
     server: {
-        port: +(process.env.PORT || 3003),
+        port: +(process.env.PORT || 5002),
         name: process.env.SERVICE_NAME || 'uploader',
     },
     authentication: {
@@ -34,7 +39,7 @@ export const config = {
     },
     upload: {
         formats: ['.mp4', '.flv', '.avi', '.mkv', 'mpg', 'mpeg'],
-        storage:  process.env.STORAGE_TYPE || 'S3',
+        storage: process.env.STORAGE_TYPE || StorageType.S3,
         maxSize: process.env.MAX_FILE_SIZE || 20971520000,
         maxFilesAmount: +(process.env.MAX_FILE_AMOUNT || 1),
         fileKey: process.env.FILE_KEY || 'videoFile',
