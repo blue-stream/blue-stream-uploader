@@ -1,5 +1,5 @@
 import { Server } from './server';
-import { RabbitMQ } from './utils/rabbitMQ';
+import * as rabbit from './utils/rabbit';
 import { UploadBroker } from './upload/upload.broker';
 import { Logger } from './utils/logger';
 import { config } from './config';
@@ -7,20 +7,20 @@ import { syslogSeverityLevels } from 'llamajs';
 
 process.on('uncaughtException', (err) => {
     console.error('Unhandled Exception', err.stack);
-    RabbitMQ.closeConnection();
+    rabbit.closeConnection();
     process.exit(1);
 });
 
 process.on('unhandledRejection', (err) => {
     console.error('Unhandled Rejection', err);
-    RabbitMQ.closeConnection();
+    rabbit.closeConnection();
     process.exit(1);
 });
 
 process.on('SIGINT', async () => {
     try {
         console.log('User Termination');
-        RabbitMQ.closeConnection();
+        rabbit.closeConnection();
         process.exit(0);
     } catch (error) {
         console.error('Faild to close connections', error);
@@ -28,8 +28,7 @@ process.on('SIGINT', async () => {
 });
 
 (async () => {
-    await RabbitMQ.connect();
-    await UploadBroker.startPublisher();
+    await rabbit.connect();
 
     Logger.configure();
     Logger.log(syslogSeverityLevels.Informational, 'Server Started', `Port: ${config.server.port}`);
@@ -38,7 +37,7 @@ process.on('SIGINT', async () => {
     const server: Server = Server.bootstrap();
 
     server.app.on('close', () => {
-        RabbitMQ.closeConnection();
+        rabbit.closeConnection();
         console.log('Server closed');
     });
 })();
