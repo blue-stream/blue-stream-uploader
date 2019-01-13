@@ -31,8 +31,6 @@ export class UploadController {
             key = req.file.filename;
         }
 
-        console.log('Upload controller');
-
         UploadBroker.publishUploadSuccessful(req.body.videoId, key);
         Logger.log(
             syslogSeverityLevels.Informational,
