@@ -1,5 +1,3 @@
-require('dotenv').config();
-
 enum StorageType {
     S3 = 'S3',
     Disk = 'Disk',
@@ -21,9 +19,9 @@ export const config = {
         port: +(process.env.RMQ_PORT || 5672),
         password: process.env.RMQ_PASSWORD || 'guest',
         username: process.env.RMQ_USERNAME || 'guest',
-        exchanges: {
-            uploadPublisher: process.env.RMQ_EXCHANGE || 'upload',
-        },
+        exchange: process.env.RMQ_EXCHANGE || 'application',
+        type: process.env.RMQ_TYPE || 'topic',
+
         reconnect_timeout: 1000,
     },
     server: {
@@ -35,7 +33,7 @@ export const config = {
         secret: process.env.SECRET_KEY || 'bLue5tream@2018',
     },
     cors: {
-        allowedOrigins: process.env.ALLOWED_ORIGINS ? process.env.ALLOWED_ORIGINS.split(',') : ['http://localhost:4200'],
+        allowedOrigins: process.env.ALLOWED_ORIGINS ? process.env.ALLOWED_ORIGINS.split(',') : ['http://localhost'],
     },
     upload: {
         formats: ['.mp4', '.flv', '.avi', '.mkv', 'mpg', 'mpeg'],
@@ -47,12 +45,12 @@ export const config = {
             path: process.env.DISK_PATH || 'C:/BlueStream/Uploads/',
         },
         s3: {
-            region: process.env.S3_REGION || '',
-            bucket: process.env.S3_BUCKET || '',
-            accessKeyId: process.env.S3_ACCESS_KEY_ID || '',
-            secretAccessKey: process.env.S3_SECRET_ACCESS_KEY || '',
+            region: process.env.S3_REGION || 'us-east-1',
+            bucket: process.env.S3_BUCKET || 'blue-stream-test',
+            accessKeyId: process.env.S3_ACCESS_KEY_ID || 'minio',
+            secretAccessKey: process.env.S3_SECRET_ACCESS_KEY || 'minio123',
             signatureVersion: process.env.S3_VERSION || 'v4',
-            endpoint: process.env.S3_ENDPOINT || 'http://172.19.165.113:9000',
+            endpoint: process.env.S3_ENDPOINT || 'http://localhost:9000',
         },
     },
 };
