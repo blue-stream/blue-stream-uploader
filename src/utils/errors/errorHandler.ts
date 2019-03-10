@@ -3,11 +3,32 @@ import { ServerError, UserError } from './applicationError';
 import { Logger } from '../logger';
 import { syslogSeverityLevels } from 'llamajs/dist';
 import { UploadBroker } from '../../upload/upload.broker';
+import { config } from '../../config';
+import { verify, TokenExpiredError, JsonWebTokenError, NotBeforeError } from 'jsonwebtoken';
+
+export function tokenErrorHandler(error: Error, req: express.Request, res: express.Response, next: express.NextFunction) {
+    if (
+        error instanceof TokenExpiredError ||
+        error instanceof JsonWebTokenError ||
+        error instanceof NotBeforeError
+    ) {
+        Logger.log(
+            syslogSeverityLevels.Notice,
+            'Authorization Error',
+            `${req.user.id} tried to access unauthorized resource`);
+
+        res.status(403).send();
+
+        next();
+    } else {
+        next(error);
+    }
+}
 
 export function userErrorHandler(error: Error, req: express.Request, res: express.Response, next: express.NextFunction) {
     if (error instanceof UserError) {
-
-        UploadBroker.publishUploadFailed(req.body.videoId);
+        const tokenData = verify(req.body.videoToken || '', config.authentication.secret) as { user: string, video: string };
+        UploadBroker.publishUploadFailed(tokenData.video);
 
         Logger.log(
             syslogSeverityLevels.Notice,
