@@ -15,7 +15,7 @@ export function tokenErrorHandler(error: Error, req: express.Request, res: expre
         Logger.log(
             syslogSeverityLevels.Notice,
             'Authorization Error',
-            `${req.user.id} tried to access unauthorized resource`);
+            `${req.user ? req.user.id : 'User'} tried to access unauthorized resource`);
 
         res.status(403).send();
 
