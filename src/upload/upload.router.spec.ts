@@ -24,9 +24,9 @@ describe('Upload', () => {
     it('Should upload mp4 file', (done: MochaDone) => {
         request(server.app)
             .post('/api/upload')
+            .query({ videoToken: token })
             .set('Content-type', 'multipart/form-data')
             .attach(config.upload.fileKey, fs.createReadStream(path.join(__dirname, '../testing-files', 'video.mp4')))
-            .field('videoToken', token)
             .expect(200)
             .end((err: Error, response: request.Response) => {
                 expect(err).to.not.exist;
@@ -42,9 +42,9 @@ describe('Upload', () => {
     it('Should upload avi file', (done: MochaDone) => {
         request(server.app)
             .post('/api/upload')
+            .query({ videoToken: token })
             .set('Content-type', 'multipart/form-data')
             .attach(config.upload.fileKey, fs.createReadStream(path.join(__dirname, '../testing-files', 'video.avi')))
-            .field('videoToken', token)
             .expect(200)
             .end((err: Error, response: request.Response) => {
                 expect(err).to.not.exist;
@@ -59,17 +59,17 @@ describe('Upload', () => {
     it('Should return 400 status code when no file attached', async () => {
         await request(server.app)
             .post('/api/upload')
-            .set('Content-type', 'multipart/form-data')
-            .field('videoToken', token)
+            // .set('Content-type', 'multipart/form-data')
+            .query({ videoToken: token })
             .expect(400);
     });
 
     it('Should not upload a non video file', (done: MochaDone) => {
         request(server.app)
             .post('/api/upload')
+            .query({ videoToken: token })
             .set('Content-type', 'multipart/form-data')
             .attach(config.upload.fileKey, fs.createReadStream(path.join(__dirname, '../testing-files', 'test.txt')))
-            .field('videoToken', token)
             .expect(415)
             .end((err: Error, response: request.Response) => {
                 expect(err).to.not.exist;
