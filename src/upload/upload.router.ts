@@ -4,6 +4,6 @@ import { canUpload } from './upload.validator';
 
 const UploadRouter: Router = Router();
 
-UploadRouter.post('/', UploadController.uploadSingle, canUpload, UploadController.upload);
+UploadRouter.post('/', canUpload, UploadController.uploadSingle, UploadController.upload);
 
 export { UploadRouter };
