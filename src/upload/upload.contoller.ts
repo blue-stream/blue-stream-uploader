@@ -15,7 +15,7 @@ export class UploadController {
 
         req.on('aborted', async () => {
             await multerManager.removeFile((req as any)['fileKey']);
-            const tokenData = verify(req.body.videoToken, config.authentication.secret) as { user: string, video: string };
+            const tokenData = verify(req.query.videoToken, config.authentication.secret) as { user: string, video: string };
             UploadBroker.publishUploadCanceled(tokenData.video);
         });
 
@@ -33,7 +33,7 @@ export class UploadController {
             key = req.file.filename;
         }
 
-        const tokenData = verify(req.body.videoToken, config.authentication.secret) as { user: string, video: string };
+        const tokenData = verify(req.query.videoToken, config.authentication.secret) as { user: string, video: string };
         UploadBroker.publishUploadSuccessful(tokenData.video, key);
         Logger.log(
             syslogSeverityLevels.Informational,

@@ -27,8 +27,8 @@ export function tokenErrorHandler(error: Error, req: express.Request, res: expre
 
 export function userErrorHandler(error: Error, req: express.Request, res: express.Response, next: express.NextFunction) {
     if (error instanceof UserError) {
-        if (req.body.videoToken) {
-            const tokenData = verify(req.body.videoToken, config.authentication.secret) as { user: string, video: string };
+        if (req.query.videoToken) {
+            const tokenData = verify(req.query.videoToken, config.authentication.secret) as { user: string, video: string };
             UploadBroker.publishUploadFailed(tokenData.video);
         }
 
