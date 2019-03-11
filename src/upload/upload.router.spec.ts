@@ -80,4 +80,20 @@ describe('Upload', () => {
                 done();
             });
     });
+
+    it('Should throw error when no token provided', (done: MochaDone) => {
+        request(server.app)
+            .post('/api/upload')
+            .set('Content-type', 'multipart/form-data')
+            .attach(config.upload.fileKey, fs.createReadStream(path.join(__dirname, '../testing-files', 'video.avi')))
+            .expect(400)
+            .end((err: Error, response: request.Response) => {
+                expect(err).to.not.exist;
+                expect(response).to.exist;
+                expect(response.body).to.have.property('type', 'RequestValidationError');
+                expect(response.body).to.have.property('message');
+
+                done();
+            });
+    });
 });
