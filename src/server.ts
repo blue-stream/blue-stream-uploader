@@ -6,7 +6,7 @@ import * as morgan from 'morgan';
 import { config } from './config';
 import { AppRouter } from './router';
 
-import { userErrorHandler, serverErrorHandler, unknownErrorHandler } from './utils/errors/errorHandler';
+import { userErrorHandler, serverErrorHandler, unknownErrorHandler, tokenErrorHandler } from './utils/errors/errorHandler';
 
 import { Authenticator } from './utils/authenticator';
 export class Server {
@@ -64,6 +64,7 @@ export class Server {
     }
 
     private initializeErrorHandler() {
+        this.app.use(tokenErrorHandler);
         this.app.use(userErrorHandler);
         this.app.use(serverErrorHandler);
         this.app.use(unknownErrorHandler);

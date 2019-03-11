@@ -6,6 +6,7 @@ import { Logger } from '../utils/logger';
 import { syslogSeverityLevels } from 'llamajs';
 import { MulterManager } from './multer/multer.manager';
 import * as multer from 'multer';
+import { verify } from 'jsonwebtoken';
 
 export class UploadController {
     static uploadSingle(req: Request, res: Response, next: NextFunction) {
@@ -14,7 +15,8 @@ export class UploadController {
 
         req.on('aborted', async () => {
             await multerManager.removeFile((req as any)['fileKey']);
-            UploadBroker.publishUploadCanceled(req.body.videoId);
+            const tokenData = verify(req.query.videoToken, config.authentication.secret) as { user: string, video: string };
+            UploadBroker.publishUploadCanceled(tokenData.video);
         });
 
         return upload.single(config.upload.fileKey)(req, res, next);
@@ -31,7 +33,8 @@ export class UploadController {
             key = req.file.filename;
         }
 
-        UploadBroker.publishUploadSuccessful(req.body.videoId, key);
+        const tokenData = verify(req.query.videoToken, config.authentication.secret) as { user: string, video: string };
+        UploadBroker.publishUploadSuccessful(tokenData.video, key);
         Logger.log(
             syslogSeverityLevels.Informational,
             'File uploaded',

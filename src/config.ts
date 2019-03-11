@@ -29,7 +29,7 @@ export const config = {
         name: process.env.SERVICE_NAME || 'uploader',
     },
     authentication: {
-        required: process.env.AUTHENTICATION_REQUIRED || false,
+        required: process.env.AUTHENTICATION_REQUIRED || true,
         secret: process.env.SECRET_KEY || 'bLue5tream@2018',
     },
     cors: {
