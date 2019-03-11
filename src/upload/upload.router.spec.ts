@@ -7,9 +7,10 @@ import { expect } from 'chai';
 import { Server } from '../server';
 import { config } from '../config';
 import { removeTestingFiles } from '../utils/remove-files';
+import { sign } from 'jsonwebtoken';
 
 let server: Server;
-
+const token = sign({ user: 'test@test', video: '123123214' }, config.authentication.secret);
 describe('Upload', () => {
     const files: string[] = [];
     before(() => {
@@ -25,6 +26,7 @@ describe('Upload', () => {
             .post('/api/upload')
             .set('Content-type', 'multipart/form-data')
             .attach(config.upload.fileKey, fs.createReadStream(path.join(__dirname, '../testing-files', 'video.mp4')))
+            .field('videoToken', token)
             .expect(200)
             .end((err: Error, response: request.Response) => {
                 expect(err).to.not.exist;
@@ -42,6 +44,7 @@ describe('Upload', () => {
             .post('/api/upload')
             .set('Content-type', 'multipart/form-data')
             .attach(config.upload.fileKey, fs.createReadStream(path.join(__dirname, '../testing-files', 'video.avi')))
+            .field('videoToken', token)
             .expect(200)
             .end((err: Error, response: request.Response) => {
                 expect(err).to.not.exist;
@@ -56,6 +59,8 @@ describe('Upload', () => {
     it('Should return 400 status code when no file attached', async () => {
         await request(server.app)
             .post('/api/upload')
+            .set('Content-type', 'multipart/form-data')
+            .field('videoToken', token)
             .expect(400);
     });
 
@@ -64,6 +69,7 @@ describe('Upload', () => {
             .post('/api/upload')
             .set('Content-type', 'multipart/form-data')
             .attach(config.upload.fileKey, fs.createReadStream(path.join(__dirname, '../testing-files', 'test.txt')))
+            .field('videoToken', token)
             .expect(415)
             .end((err: Error, response: request.Response) => {
                 expect(err).to.not.exist;
