@@ -2,8 +2,7 @@ import { Request, Response, NextFunction } from 'express';
 import { UploadBroker } from './upload.broker';
 import { config } from '../config';
 import { RequestValidationError } from '../utils/errors/applicationErrors';
-import { Logger } from '../utils/logger';
-import { syslogSeverityLevels } from 'llamajs';
+import { log } from '../utils/logger';
 import { MulterManager } from './multer/multer.manager';
 import * as multer from 'multer';
 import { verify } from 'jsonwebtoken';
@@ -35,10 +34,7 @@ export class UploadController {
 
         const tokenData = verify(req.query.videoToken, config.authentication.secret) as { user: string, video: string };
         UploadBroker.publishUploadSuccessful(tokenData.video, key);
-        Logger.log(
-            syslogSeverityLevels.Informational,
-            'File uploaded',
-            `file with key ${key} was uploaded to ${config.upload.storage}`);
+        log('info' , 'File uploaded', `file with key ${key} was uploaded to ${config.upload.storage}`, '', req.user.id);
 
         return res.json(key);
     }

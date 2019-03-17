@@ -1,7 +1,6 @@
 import * as express from 'express';
 import { ServerError, UserError } from './applicationError';
-import { Logger } from '../logger';
-import { syslogSeverityLevels } from 'llamajs/dist';
+import { log } from '../logger';
 import { UploadBroker } from '../../upload/upload.broker';
 import { config } from '../../config';
 import { verify, TokenExpiredError, JsonWebTokenError, NotBeforeError } from 'jsonwebtoken';
@@ -12,10 +11,7 @@ export function tokenErrorHandler(error: Error, req: express.Request, res: expre
         error instanceof JsonWebTokenError ||
         error instanceof NotBeforeError
     ) {
-        Logger.log(
-            syslogSeverityLevels.Notice,
-            'Authorization Error',
-            `${req.user ? req.user.id : 'User'} tried to access unauthorized resource`);
+        log('warn' , 'Authorization Error', `${req.user ? req.user.id : 'User'} tried to access unauthorized resource`, '', req.user.id);
 
         res.status(403).send();
 
@@ -32,10 +28,7 @@ export function userErrorHandler(error: Error, req: express.Request, res: expres
             UploadBroker.publishUploadFailed(tokenData.video);
         }
 
-        Logger.log(
-            syslogSeverityLevels.Notice,
-            'User Error',
-            `${error.name} was thrown with status ${error.status} and message ${error.message}`);
+        log('info' , 'User Error', `${error.name} was thrown with status ${error.status} and message ${error.message}`, '', req.user.id);
 
         res.status(error.status).send({
             type: error.name,
@@ -50,10 +43,7 @@ export function userErrorHandler(error: Error, req: express.Request, res: expres
 
 export function serverErrorHandler(error: Error, req: express.Request, res: express.Response, next: express.NextFunction) {
     if (error instanceof ServerError) {
-        Logger.log(
-            syslogSeverityLevels.Alert,
-            'Server Error',
-            `${error.name} was thrown with status ${error.status} and message ${error.message}`);
+        log('warn' , 'Server Error', `${error.name} was thrown with status ${error.status} and message ${error.message}`, '', req.user.id);
 
         res.status(error.status).send({
             type: error.name,
@@ -67,10 +57,7 @@ export function serverErrorHandler(error: Error, req: express.Request, res: expr
 }
 
 export function unknownErrorHandler(error: Error, req: express.Request, res: express.Response, next: express.NextFunction) {
-    Logger.log(
-        syslogSeverityLevels.Critical,
-        'Unknown Error',
-        `${error.name} was thrown with status 500 and message ${error.message}`);
+    log('error' , 'Unknown Error', `${error.name} was thrown with status 500 and message ${error.message}`, '', req.user.id);
 
     res.status(500).send({
         type: error.name,

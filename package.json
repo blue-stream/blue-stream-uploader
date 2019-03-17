@@ -1,5 +1,5 @@
 {
-  "name": "blue-stream-template",
+  "name": "blue-stream-uploader",
   "version": "0.0.0",
   "description": "Blue Stream micro-service template for future services",
   "main": "index.js",
@@ -56,11 +56,12 @@
     "dotenv": "^6.0.0",
     "express": "^4.16.3",
     "helmet": "^3.12.1",
-    "llamajs": "^0.2.0",
     "morgan": "^1.9.0",
     "multer": "^1.3.0",
     "multer-s3": "^2.7.0",
     "passport": "^0.4.0",
-    "passport-jwt": "^4.0.0"
+    "passport-jwt": "^4.0.0",
+    "winston": "^3.2.1",
+    "winston-elasticsearch": "^0.7.9"
   }
 }
