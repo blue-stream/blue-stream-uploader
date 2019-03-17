@@ -11,7 +11,7 @@ export function tokenErrorHandler(error: Error, req: express.Request, res: expre
         error instanceof JsonWebTokenError ||
         error instanceof NotBeforeError
     ) {
-        log('warn' , 'Authorization Error', `${req.user ? req.user.id : 'User'} tried to access unauthorized resource`, '', req.user.id);
+        log('warn' , 'Authorization Error', `${req.user ? req.user.id : 'User'} tried to access unauthorized resource`, '', req.user ? req.user.id : 'unknown');
 
         res.status(403).send();
 
@@ -28,7 +28,7 @@ export function userErrorHandler(error: Error, req: express.Request, res: expres
             UploadBroker.publishUploadFailed(tokenData.video);
         }
 
-        log('info' , 'User Error', `${error.name} was thrown with status ${error.status} and message ${error.message}`, '', req.user.id);
+        log('info' , 'User Error', `${error.name} was thrown with status ${error.status} and message ${error.message}`, '', req.user ? req.user.id : 'unknown');
 
         res.status(error.status).send({
             type: error.name,
