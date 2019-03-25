@@ -1,7 +1,7 @@
 {
   "name": "blue-stream-uploader",
   "version": "0.0.0",
-  "description": "Blue Stream micro-service template for future services",
+  "description": "Blue Stream uploader for uploading video files",
   "main": "index.js",
   "scripts": {
     "build": "tsc",
@@ -54,6 +54,7 @@
     "aws-sdk": "^2.249.1",
     "body-parser": "^1.18.3",
     "dotenv": "^6.0.0",
+    "elastic-apm-node": "^1.14.5",
     "express": "^4.16.3",
     "helmet": "^3.12.1",
     "morgan": "^1.9.0",

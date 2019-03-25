@@ -21,11 +21,15 @@ export const config = {
     },
     server: {
         port: +(process.env.PORT || 5002),
-        name: process.env.SERVICE_NAME || 'uploader',
+        name: process.env.SERVICE_NAME || 'blue-stream-uploader',
     },
     authentication: {
         required: process.env.AUTHENTICATION_REQUIRED || true,
         secret: process.env.SECRET_KEY || 'bLue5tream@2018',
+    },
+    apm: {
+        server: process.env.APM_SERVER || 'http://apm:8200',
+        isActive: process.env.APM_ACTIVE || true,
     },
     cors: {
         allowedOrigins: process.env.ALLOWED_ORIGINS ? process.env.ALLOWED_ORIGINS.split(',') : ['http://localhost'],
