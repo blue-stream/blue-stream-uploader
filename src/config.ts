@@ -35,7 +35,7 @@ export const config = {
         allowedOrigins: process.env.ALLOWED_ORIGINS ? process.env.ALLOWED_ORIGINS.split(',') : ['http://localhost'],
     },
     upload: {
-        formats: ['.mp4', '.flv', '.avi', '.mkv', '.mpg', '.mpeg'],
+        formats: ['.mp4', '.flv', '.avi', '.mkv', '.mpg', '.mpeg', '.m4v', '.mov', '.wmv'],
         storage: process.env.STORAGE_TYPE || StorageType.S3,
         maxSize: process.env.MAX_FILE_SIZE || 20971520000,
         maxFilesAmount: +(process.env.MAX_FILE_AMOUNT || 1),
