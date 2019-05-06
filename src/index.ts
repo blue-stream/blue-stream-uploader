@@ -12,6 +12,7 @@ if (config.apm.isActive) {
 import { Server } from './server';
 import * as rabbit from './utils/rabbit';
 import { log } from './utils/logger';
+import { UploadSubscribeBroker } from './upload/upload.broker.subscribe';
 
 process.on('uncaughtException', (err) => {
     console.error('Unhandled Exception', err.stack);
@@ -37,6 +38,7 @@ process.on('SIGINT', async () => {
 
 (async () => {
     await rabbit.connect();
+    await UploadSubscribeBroker.subscribe();
 
     log('verbose' , 'Server Started', `Port: ${config.server.port}`);
 

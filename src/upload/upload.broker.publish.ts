@@ -2,14 +2,14 @@
 import * as rabbit from '../utils/rabbit';
 import { config } from '../config';
 
-export class UploadBroker {
+export class UploadPublishBroker {
     public static publishUploadSuccessful(videoId: string, videoKey: string) {
         const message = {
             key: videoKey,
             id: videoId,
         };
 
-        UploadBroker.publishMessage(message, 'succeeded');
+        UploadPublishBroker.publishMessage(message, 'succeeded');
     }
 
     public static publishUploadCanceled(videoId: string) {
@@ -17,7 +17,7 @@ export class UploadBroker {
             id: videoId,
         };
 
-        UploadBroker.publishMessage(message, 'canceled');
+        UploadPublishBroker.publishMessage(message, 'canceled');
     }
 
     public static publishUploadFailed(videoId: string) {
@@ -25,7 +25,7 @@ export class UploadBroker {
             id: videoId,
         };
 
-        UploadBroker.publishMessage(message, 'failed');
+        UploadPublishBroker.publishMessage(message, 'failed');
     }
 
     public static publishMessage(message: any, status: string) {
