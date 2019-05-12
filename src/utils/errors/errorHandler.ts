@@ -1,7 +1,7 @@
 import * as express from 'express';
 import { ServerError, UserError } from './applicationError';
 import { log } from '../logger';
-import { UploadBroker } from '../../upload/upload.broker';
+import { UploadPublishBroker } from '../../upload/upload.broker.publish';
 import { config } from '../../config';
 import { verify, TokenExpiredError, JsonWebTokenError, NotBeforeError } from 'jsonwebtoken';
 
@@ -25,7 +25,7 @@ export function userErrorHandler(error: Error, req: express.Request, res: expres
     if (error instanceof UserError) {
         if (req.query.videoToken) {
             const tokenData = verify(req.query.videoToken, config.authentication.secret) as { user: string, video: string };
-            UploadBroker.publishUploadFailed(tokenData.video);
+            UploadPublishBroker.publishUploadFailed(tokenData.video);
         }
 
         log('info' , 'User Error', `${error.name} was thrown with status ${error.status} and message ${error.message}`, '', req.user ? req.user.id : 'unknown');
