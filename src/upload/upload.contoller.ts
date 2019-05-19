@@ -29,8 +29,10 @@ export class UploadController {
         }
 
         const tokenData = verify(req.query.videoToken, config.authentication.secret) as { user: string, video: string };
-        UploadPublishBroker.publishUploadSuccessful(tokenData.video, key);
-        log('info' , 'File uploaded', `file with key ${key} was uploaded to ${config.upload.storage}`, '', req.user ? req.user.id : 'unknown');
+        const userId: string = req.user ? req.user.id : 'unknown';
+
+        UploadPublishBroker.publishUploadSuccessful(tokenData.video, key, userId);
+        log('info' , 'File uploaded', `file with key ${key} was uploaded to ${config.upload.storage}`, '', userId);
 
         return res.json(key);
     }
