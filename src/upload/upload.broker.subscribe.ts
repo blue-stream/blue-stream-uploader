@@ -19,6 +19,14 @@ export class UploadSubscribeBroker {
             'videoService.video.remove.succeeded',
             UploadSubscribeBroker.deleteFiles,
         );
+
+        rabbit.subscribe(
+            'application',
+            'topic',
+            'upload-action-queue',
+            'videoService.video.replaced.succeeded',
+            UploadSubscribeBroker.deleteFiles,
+        );
     }
 
     private static async deleteFiles(message: videoRemovedMessage) {
