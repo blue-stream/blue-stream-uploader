@@ -3,8 +3,9 @@ import * as rabbit from '../utils/rabbit';
 import { config } from '../config';
 
 export class UploadPublishBroker {
-    public static publishUploadSuccessful(videoId: string, videoKey: string) {
+    public static publishUploadSuccessful(videoId: string, videoKey: string, userId: string) {
         const message = {
+            userId,
             key: videoKey,
             id: videoId,
         };
