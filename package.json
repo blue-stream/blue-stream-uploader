@@ -51,7 +51,7 @@
   },
   "dependencies": {
     "amqplib": "^0.5.2",
-    "aws-sdk": "^2.249.1",
+    "aws-sdk": "^2.814.0",
     "body-parser": "^1.18.3",
     "dotenv": "^6.0.0",
     "elastic-apm-node": "^1.14.5",
